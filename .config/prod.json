@@ -1,0 +1,17 @@
+{
+  "port": 80,
+  "databases": {
+    "postgres": "postgres://postgres:%s@postgres:5432/brigade_service?sslmode=disable",
+    "kafka": {
+      "brokers": [
+        "kafka:9093"
+      ],
+      "topics": {
+        "tasks": "tasks-topic"
+      }
+    }
+  },
+  "cluster": {
+    "userService": "http://user-service"
+  }
+}
