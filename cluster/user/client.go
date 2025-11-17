@@ -1,8 +1,7 @@
 package user
 
 import (
-	"fmt"
-	"net/http"
+	"time"
 
 	"github.com/sunshineOfficial/golib/goctx"
 	"github.com/sunshineOfficial/golib/gohttp"
@@ -21,20 +20,22 @@ func NewClient(client gohttp.Client, baseURL string) *Client {
 }
 
 func (c *Client) GetUsersByIDs(ctx goctx.Context, userIDs []int) ([]User, error) {
-	url, err := gohttp.AddIntQuery(c.baseURL+"/users", "ids", userIDs...)
-	if err != nil {
-		return nil, fmt.Errorf("AddIntQuery: %w", err)
+	u := User{
+		Role:        RoleInspector,
+		Surname:     "Хрунин",
+		Name:        "Дмитрий",
+		Patronymic:  "Алексеевич",
+		PhoneNumber: "+79371234567",
+		Email:       "test@gmail.com",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
-	var response []User
-	status, err := c.client.DoJson(ctx, http.MethodGet, url, nil, &response)
-	if err != nil {
-		return nil, fmt.Errorf("c.client.DoJson: %w", err)
+	users := make([]User, 0, len(userIDs))
+	for _, id := range userIDs {
+		u.ID = id
+		users = append(users, u)
 	}
 
-	if status != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", status)
-	}
-
-	return response, nil
+	return users, nil
 }
