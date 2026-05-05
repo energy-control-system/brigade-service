@@ -31,7 +31,7 @@ func NewServerBuilder(ctx context.Context, log golog.Logger, settings config.Set
 }
 
 func (s *ServerBuilder) AddDebug() {
-	s.router.Install(plugin.NewPProf(), plugin.NewMetrics())
+	s.router.Install(plugin.NewPProf(), plugin.NewMetrics(), plugin.NewSwaggo("api/brigade-service"))
 }
 
 func (s *ServerBuilder) AddBrigades(service *brigade.Service) {

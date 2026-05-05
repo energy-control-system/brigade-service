@@ -1,0 +1,234 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for managing inspector brigades.",
+        "title": "Brigade Service API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/api/brigade-service",
+    "paths": {
+        "/brigades": {
+            "get": {
+                "description": "Returns all brigades.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brigades"
+                ],
+                "summary": "List brigades",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/brigade-service_service_brigade.Brigade"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gorouter.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a brigade from inspector identifiers.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brigades"
+                ],
+                "summary": "Create brigade",
+                "parameters": [
+                    {
+                        "description": "Brigade creation payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/brigade.CreateBrigadeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/brigade-service_service_brigade.Brigade"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gorouter.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gorouter.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/brigades/{id}": {
+            "get": {
+                "description": "Returns a brigade with assigned inspectors.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "brigades"
+                ],
+                "summary": "Get brigade by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Brigade ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/brigade-service_service_brigade.Brigade"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gorouter.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/gorouter.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/gorouter.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "brigade-service_service_brigade.Brigade": {
+            "type": "object",
+            "properties": {
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Inspectors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/brigade.Inspector"
+                    }
+                },
+                "Status": {
+                    "$ref": "#/definitions/brigade.Status"
+                },
+                "UpdatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "brigade.CreateBrigadeRequest": {
+            "type": "object",
+            "properties": {
+                "InspectorIDs": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "brigade.Inspector": {
+            "type": "object",
+            "properties": {
+                "AssignedAt": {
+                    "type": "string"
+                },
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Patronymic": {
+                    "type": "string"
+                },
+                "PhoneNumber": {
+                    "type": "string"
+                },
+                "Surname": {
+                    "type": "string"
+                },
+                "UpdatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "brigade.Status": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "x-enum-varnames": [
+                "StatusUnknown",
+                "StatusIdle",
+                "StatusOnTask",
+                "StatusArchived"
+            ]
+        },
+        "gorouter.ErrorInfo": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "gorouter.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/gorouter.ErrorInfo"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,155 @@
+basePath: /api/brigade-service
+definitions:
+  brigade-service_service_brigade.Brigade:
+    properties:
+      CreatedAt:
+        type: string
+      ID:
+        type: integer
+      Inspectors:
+        items:
+          $ref: '#/definitions/brigade.Inspector'
+        type: array
+      Status:
+        $ref: '#/definitions/brigade.Status'
+      UpdatedAt:
+        type: string
+    type: object
+  brigade.CreateBrigadeRequest:
+    properties:
+      InspectorIDs:
+        items:
+          type: integer
+        type: array
+    type: object
+  brigade.Inspector:
+    properties:
+      AssignedAt:
+        type: string
+      CreatedAt:
+        type: string
+      Email:
+        type: string
+      ID:
+        type: integer
+      Name:
+        type: string
+      Patronymic:
+        type: string
+      PhoneNumber:
+        type: string
+      Surname:
+        type: string
+      UpdatedAt:
+        type: string
+    type: object
+  brigade.Status:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - StatusUnknown
+    - StatusIdle
+    - StatusOnTask
+    - StatusArchived
+  gorouter.ErrorInfo:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  gorouter.ErrorResponse:
+    properties:
+      error:
+        $ref: '#/definitions/gorouter.ErrorInfo'
+    type: object
+info:
+  contact: {}
+  description: API for managing inspector brigades.
+  title: Brigade Service API
+  version: "1.0"
+paths:
+  /brigades:
+    get:
+      description: Returns all brigades.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/brigade-service_service_brigade.Brigade'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gorouter.ErrorResponse'
+      summary: List brigades
+      tags:
+      - brigades
+    post:
+      consumes:
+      - application/json
+      description: Creates a brigade from inspector identifiers.
+      parameters:
+      - description: Brigade creation payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/brigade.CreateBrigadeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/brigade-service_service_brigade.Brigade'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gorouter.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gorouter.ErrorResponse'
+      summary: Create brigade
+      tags:
+      - brigades
+  /brigades/{id}:
+    get:
+      description: Returns a brigade with assigned inspectors.
+      parameters:
+      - description: Brigade ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/brigade-service_service_brigade.Brigade'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gorouter.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gorouter.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gorouter.ErrorResponse'
+      summary: Get brigade by ID
+      tags:
+      - brigades
+swagger: "2.0"

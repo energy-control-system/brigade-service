@@ -8,8 +8,14 @@ import (
 	"github.com/shopspring/decimal"
 	"github.com/sunshineOfficial/golib/golog"
 	"github.com/sunshineOfficial/golib/goos"
+
+	_ "brigade-service/docs"
 )
 
+// @title Brigade Service API
+// @version 1.0
+// @description API for managing inspector brigades.
+// @BasePath /api/brigade-service
 func main() {
 	configureDecimal()
 
