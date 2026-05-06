@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/sunshineOfficial/golib/goctx"
+	"github.com/sunshineOfficial/golib/pagination"
 )
 
 type mockUserService struct {
@@ -35,7 +36,7 @@ func (m *mockRepository) GetBrigadeByID(_ context.Context, _ int) (Brigade, erro
 	return m.brigade, m.err
 }
 
-func (m *mockRepository) GetAllBrigades(_ context.Context) ([]Brigade, error) {
+func (m *mockRepository) GetAllBrigades(_ context.Context, _ pagination.Pagination) ([]Brigade, error) {
 	return nil, m.err
 }
 

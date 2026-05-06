@@ -25,6 +25,20 @@ const docTemplate = `{
                     "brigades"
                 ],
                 "summary": "List brigades",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Maximum number of items to return; 0 means no limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items to skip",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -33,6 +47,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/brigade-service_service_brigade.Brigade"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/gorouter.ErrorResponse"
                         }
                     },
                     "500": {

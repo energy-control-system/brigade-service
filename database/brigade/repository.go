@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/sunshineOfficial/golib/pagination"
 )
 
 var (
@@ -142,7 +143,7 @@ func (r *Repository) GetBrigadeByID(ctx context.Context, id int) (brigade.Brigad
 	return b, err
 }
 
-func (r *Repository) GetAllBrigades(ctx context.Context) ([]brigade.Brigade, error) {
+func (r *Repository) GetAllBrigades(ctx context.Context, page pagination.Pagination) ([]brigade.Brigade, error) {
 	tx, err := r.db.BeginTxx(ctx, &sql.TxOptions{ReadOnly: true})
 	if err != nil {
 		return nil, fmt.Errorf("r.db.BeginTxx: %w", err)
@@ -154,14 +155,26 @@ func (r *Repository) GetAllBrigades(ctx context.Context) ([]brigade.Brigade, err
 	}()
 
 	var dbBrigades []Brigade
-	err = tx.SelectContext(ctx, &dbBrigades, getAllBrigadesSQL)
+	err = tx.SelectContext(ctx, &dbBrigades, getAllBrigadesSQL, page.LimitArg(), page.Offset)
 	if err != nil {
 		err = fmt.Errorf("tx.SelectContext: %w", err)
 		return nil, err
 	}
+	if len(dbBrigades) == 0 {
+		if err = tx.Commit(); err != nil {
+			err = fmt.Errorf("tx.Commit: %w", err)
+			return nil, err
+		}
+		return []brigade.Brigade{}, nil
+	}
+
+	brigadeIDs := make([]int, 0, len(dbBrigades))
+	for _, dbBrigade := range dbBrigades {
+		brigadeIDs = append(brigadeIDs, dbBrigade.ID)
+	}
 
 	var members []Member
-	err = tx.SelectContext(ctx, &members, getAllMembersSQL)
+	err = tx.SelectContext(ctx, &members, getAllMembersSQL, brigadeIDs)
 	if err != nil {
 		err = fmt.Errorf("tx.SelectContext: %w", err)
 		return nil, err

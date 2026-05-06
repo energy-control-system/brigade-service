@@ -12,6 +12,7 @@ import (
 	"github.com/sunshineOfficial/golib/goctx"
 	"github.com/sunshineOfficial/golib/gokafka"
 	"github.com/sunshineOfficial/golib/golog"
+	"github.com/sunshineOfficial/golib/pagination"
 )
 
 const kafkaSubscribeTimeout = 2 * time.Minute
@@ -95,8 +96,12 @@ func (s *Service) GetBrigadeByID(ctx goctx.Context, id int) (Brigade, error) {
 	return b, nil
 }
 
-func (s *Service) GetAllBrigades(ctx goctx.Context) ([]Brigade, error) {
-	brigades, err := s.repository.GetAllBrigades(ctx)
+func (s *Service) GetAllBrigades(ctx goctx.Context, page pagination.Pagination) ([]Brigade, error) {
+	if err := page.Validate(); err != nil {
+		return nil, fmt.Errorf("validate pagination: %w", err)
+	}
+
+	brigades, err := s.repository.GetAllBrigades(ctx, page)
 	if err != nil {
 		return nil, fmt.Errorf("get all brigades from repository: %w", err)
 	}
