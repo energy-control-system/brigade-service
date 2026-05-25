@@ -18,13 +18,13 @@ const docTemplate = `{
                     },
                     "Inspectors": {
                         "items": {
-                            "$ref": "#/components/schemas/brigade-service_service_brigade.Inspector"
+                            "$ref": "#/components/schemas/brigade.Inspector"
                         },
                         "type": "array",
                         "uniqueItems": false
                     },
                     "Status": {
-                        "$ref": "#/components/schemas/brigade-service_service_brigade.Status"
+                        "$ref": "#/components/schemas/brigade.Status"
                     },
                     "UpdatedAt": {
                         "type": "string"
@@ -32,7 +32,7 @@ const docTemplate = `{
                 },
                 "type": "object"
             },
-            "brigade-service_service_brigade.CreateBrigadeRequest": {
+            "brigade.CreateBrigadeRequest": {
                 "properties": {
                     "InspectorIDs": {
                         "items": {
@@ -44,7 +44,7 @@ const docTemplate = `{
                 },
                 "type": "object"
             },
-            "brigade-service_service_brigade.Inspector": {
+            "brigade.Inspector": {
                 "properties": {
                     "AssignedAt": {
                         "type": "string"
@@ -76,7 +76,7 @@ const docTemplate = `{
                 },
                 "type": "object"
             },
-            "brigade-service_service_brigade.Status": {
+            "brigade.Status": {
                 "enum": [
                     0,
                     1,
@@ -189,16 +189,9 @@ const docTemplate = `{
                     "content": {
                         "application/json": {
                             "schema": {
-                                "oneOf": [
-                                    {
-                                        "type": "object"
-                                    },
-                                    {
-                                        "$ref": "#/components/schemas/brigade-service_service_brigade.CreateBrigadeRequest",
-                                        "summary": "request",
-                                        "description": "Brigade creation payload"
-                                    }
-                                ]
+                                "$ref": "#/components/schemas/brigade.CreateBrigadeRequest",
+                                "summary": "request",
+                                "description": "Brigade creation payload"
                             }
                         }
                     },

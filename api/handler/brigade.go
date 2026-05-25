@@ -13,7 +13,6 @@ import (
 // @Summary Create brigade
 // @Description Creates a brigade from inspector identifiers.
 // @Tags brigades
-// @Accept json
 // @Produce json
 // @Param request body brigade.CreateBrigadeRequest true "Brigade creation payload"
 // @Success 200 {object} brigade.Brigade

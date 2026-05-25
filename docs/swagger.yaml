@@ -8,15 +8,15 @@ components:
           type: integer
         Inspectors:
           items:
-            $ref: '#/components/schemas/brigade-service_service_brigade.Inspector'
+            $ref: '#/components/schemas/brigade.Inspector'
           type: array
           uniqueItems: false
         Status:
-          $ref: '#/components/schemas/brigade-service_service_brigade.Status'
+          $ref: '#/components/schemas/brigade.Status'
         UpdatedAt:
           type: string
       type: object
-    brigade-service_service_brigade.CreateBrigadeRequest:
+    brigade.CreateBrigadeRequest:
       properties:
         InspectorIDs:
           items:
@@ -24,7 +24,7 @@ components:
           type: array
           uniqueItems: false
       type: object
-    brigade-service_service_brigade.Inspector:
+    brigade.Inspector:
       properties:
         AssignedAt:
           type: string
@@ -45,7 +45,7 @@ components:
         UpdatedAt:
           type: string
       type: object
-    brigade-service_service_brigade.Status:
+    brigade.Status:
       enum:
       - 0
       - 1
@@ -122,11 +122,9 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-              - type: object
-              - $ref: '#/components/schemas/brigade-service_service_brigade.CreateBrigadeRequest'
-                description: Brigade creation payload
-                summary: request
+              $ref: '#/components/schemas/brigade.CreateBrigadeRequest'
+              description: Brigade creation payload
+              summary: request
         description: Brigade creation payload
         required: true
       responses:
