@@ -38,6 +38,7 @@ func (s *ServerBuilder) AddBrigades(service *brigade.Service) {
 	r := s.router.SubRouter("/brigades")
 	r.HandlePost("", handler.CreateBrigade(service))
 	r.HandleGet("/{id}", handler.GetBrigadeByID(service))
+	r.HandlePatch("/{id}/archive", handler.ArchiveBrigade(service))
 	r.HandleGet("", handler.GetAllBrigades(service))
 }
 

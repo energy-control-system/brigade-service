@@ -140,6 +140,14 @@ func (s *Service) GetAllBrigades(ctx goctx.Context, page pagination.Pagination) 
 	return brigades, nil
 }
 
+func (s *Service) ArchiveBrigade(ctx goctx.Context, id int) error {
+	if err := s.repository.UpdateBrigadeStatus(ctx, id, StatusArchived); err != nil {
+		return fmt.Errorf("archive brigade in repository: %w", err)
+	}
+
+	return nil
+}
+
 func (s *Service) SubscriberOnTaskEvent(mainCtx context.Context, log golog.Logger) gokafka.Subscriber {
 	return func(message gokafka.Message, err error) {
 		ctx, cancel := context.WithTimeout(mainCtx, kafkaSubscribeTimeout)

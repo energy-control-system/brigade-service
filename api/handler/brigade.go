@@ -66,6 +66,32 @@ func GetBrigadeByID(s *brigade.Service) gorouter.Handler {
 	}
 }
 
+// ArchiveBrigade godoc
+// @Summary Archive brigade
+// @Description Marks a brigade as archived.
+// @Tags brigades
+// @Produce json
+// @Param id path int true "Brigade ID"
+// @Success 204
+// @Failure 400 {object} gorouter.ErrorResponse
+// @Failure 404 {object} gorouter.ErrorResponse
+// @Failure 500 {object} gorouter.ErrorResponse
+// @Router /brigades/{id}/archive [patch]
+func ArchiveBrigade(s *brigade.Service) gorouter.Handler {
+	return func(c gorouter.Context) error {
+		var vars brigadeIDVars
+		if err := c.Vars(&vars); err != nil {
+			return fmt.Errorf("failed to read brigade id: %w", err)
+		}
+
+		if err := s.ArchiveBrigade(c.Ctx(), vars.ID); err != nil {
+			return fmt.Errorf("failed to archive brigade: %w", err)
+		}
+
+		return c.WriteJson(http.StatusNoContent, nil)
+	}
+}
+
 // GetAllBrigades godoc
 // @Summary List brigades
 // @Description Returns all brigades.

@@ -20,8 +20,14 @@ func (m *mockUserService) GetUsersByIDs(_ goctx.Context, _ []int) ([]user.User, 
 }
 
 type mockRepository struct {
-	brigade Brigade
-	err     error
+	brigade       Brigade
+	err           error
+	statusUpdates []statusUpdate
+}
+
+type statusUpdate struct {
+	brigadeID int
+	status    Status
 }
 
 func (m *mockRepository) CreateBrigade(_ context.Context, inspectors []Inspector) (Brigade, error) {
@@ -40,7 +46,11 @@ func (m *mockRepository) GetAllBrigades(_ context.Context, _ pagination.Paginati
 	return nil, m.err
 }
 
-func (m *mockRepository) UpdateBrigadeStatus(_ context.Context, _ int, _ Status) error {
+func (m *mockRepository) UpdateBrigadeStatus(_ context.Context, brigadeID int, status Status) error {
+	m.statusUpdates = append(m.statusUpdates, statusUpdate{
+		brigadeID: brigadeID,
+		status:    status,
+	})
 	return m.err
 }
 
@@ -127,5 +137,27 @@ func TestCreateBrigade_RepositoryError(t *testing.T) {
 	})
 	if err == nil {
 		t.Fatal("expected error, got nil")
+	}
+}
+
+func TestArchiveBrigade_UpdatesStatusToArchived(t *testing.T) {
+	repo := &mockRepository{}
+	svc := NewService(repo, &mockUserService{})
+
+	err := svc.ArchiveBrigade(goctx.Wrap(context.Background()), 42)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(repo.statusUpdates) != 1 {
+		t.Fatalf("expected 1 status update, got %d", len(repo.statusUpdates))
+	}
+
+	update := repo.statusUpdates[0]
+	if update.brigadeID != 42 {
+		t.Fatalf("expected brigade ID = 42, got %d", update.brigadeID)
+	}
+	if update.status != StatusArchived {
+		t.Fatalf("expected status = %d, got %d", StatusArchived, update.status)
 	}
 }
