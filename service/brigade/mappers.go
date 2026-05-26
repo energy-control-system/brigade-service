@@ -10,7 +10,7 @@ func MapUserToInspector(u user.User) Inspector {
 		Surname:     u.Surname,
 		Name:        u.Name,
 		Patronymic:  u.Patronymic,
-		PhoneNumber: u.PhoneNumber,
+		PhoneNumber: u.Phone,
 		Email:       u.Email,
 		CreatedAt:   u.CreatedAt,
 		UpdatedAt:   u.UpdatedAt,

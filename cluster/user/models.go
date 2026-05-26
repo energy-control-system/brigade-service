@@ -12,13 +12,13 @@ const (
 )
 
 type User struct {
-	ID          int       `json:"ID"`
-	Role        Role      `json:"Role"`
-	Surname     string    `json:"Surname"`
-	Name        string    `json:"Name"`
-	Patronymic  string    `json:"Patronymic"`
-	PhoneNumber string    `json:"PhoneNumber"`
-	Email       string    `json:"Email"`
-	CreatedAt   time.Time `json:"CreatedAt"`
-	UpdatedAt   time.Time `json:"UpdatedAt"`
+	ID         int       `json:"id"`
+	Role       Role      `json:"role"`
+	Surname    string    `json:"surname"`
+	Name       string    `json:"name"`
+	Patronymic string    `json:"patronymic"`
+	Phone      string    `json:"phone"`
+	Email      string    `json:"email"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
 }
