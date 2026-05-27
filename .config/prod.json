@@ -12,6 +12,6 @@
     }
   },
   "cluster": {
-    "userService": "http://user-service"
+    "userService": "http://user-service:3000"
   }
 }
