@@ -18,6 +18,7 @@ import (
 // @Success 200 {object} brigade.Brigade
 // @Failure 400 {object} gorouter.ErrorResponse
 // @Failure 500 {object} gorouter.ErrorResponse
+// @Security bearer
 // @Router /brigades [post]
 func CreateBrigade(s *brigade.Service) gorouter.Handler {
 	return func(c gorouter.Context) error {
@@ -76,6 +77,7 @@ func GetBrigadeByID(s *brigade.Service) gorouter.Handler {
 // @Failure 400 {object} gorouter.ErrorResponse
 // @Failure 404 {object} gorouter.ErrorResponse
 // @Failure 500 {object} gorouter.ErrorResponse
+// @Security bearer
 // @Router /brigades/{id}/archive [patch]
 func ArchiveBrigade(s *brigade.Service) gorouter.Handler {
 	return func(c gorouter.Context) error {
@@ -102,6 +104,7 @@ func ArchiveBrigade(s *brigade.Service) gorouter.Handler {
 // @Success 200 {array} brigade.Brigade
 // @Failure 400 {object} gorouter.ErrorResponse
 // @Failure 500 {object} gorouter.ErrorResponse
+// @Security bearer
 // @Router /brigades [get]
 func GetAllBrigades(s *brigade.Service) gorouter.Handler {
 	return func(c gorouter.Context) error {

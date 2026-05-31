@@ -69,6 +69,12 @@ components:
         error:
           $ref: '#/components/schemas/gorouter.ErrorInfo'
       type: object
+  securitySchemes:
+    bearer:
+      description: JWT authorization header. Use Bearer <token>.
+      in: header
+      name: Authorization
+      type: apiKey
 externalDocs:
   description: ""
   url: ""
@@ -113,6 +119,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/gorouter.ErrorResponse'
           description: Internal Server Error
+      security:
+      - bearer: []
       summary: List brigades
       tags:
       - brigades
@@ -146,6 +154,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/gorouter.ErrorResponse'
           description: Internal Server Error
+      security:
+      - bearer: []
       summary: Create brigade
       tags:
       - brigades
@@ -218,6 +228,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/gorouter.ErrorResponse'
           description: Internal Server Error
+      security:
+      - bearer: []
       summary: Archive brigade
       tags:
       - brigades
