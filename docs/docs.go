@@ -110,14 +110,6 @@ const docTemplate = `{
                 },
                 "type": "object"
             }
-        },
-        "securitySchemes": {
-            "bearer": {
-                "description": "JWT authorization header. Use Bearer \u003ctoken\u003e.",
-                "in": "header",
-                "name": "Authorization",
-                "type": "apiKey"
-            }
         }
     },
     "info": {
@@ -186,11 +178,6 @@ const docTemplate = `{
                         "description": "Internal Server Error"
                     }
                 },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ],
                 "summary": "List brigades",
                 "tags": [
                     "brigades"
@@ -243,11 +230,6 @@ const docTemplate = `{
                         "description": "Internal Server Error"
                     }
                 },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ],
                 "summary": "Create brigade",
                 "tags": [
                     "brigades"
@@ -365,11 +347,6 @@ const docTemplate = `{
                         "description": "Internal Server Error"
                     }
                 },
-                "security": [
-                    {
-                        "bearer": []
-                    }
-                ],
                 "summary": "Archive brigade",
                 "tags": [
                     "brigades"

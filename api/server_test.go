@@ -9,31 +9,32 @@ import (
 	"github.com/sunshineOfficial/golib/golog"
 )
 
-func TestBrigadeAuthorizationPolicy(t *testing.T) {
+func TestBrigadeRoutesAllowUnauthenticatedRequests(t *testing.T) {
 	builder := NewServerBuilder(t.Context(), golog.NewLogger("test"), config.Settings{
 		Port: 80,
 	})
 	builder.AddBrigades(nil)
 
-	t.Run("creation requires authorization", func(t *testing.T) {
-		response := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodPost, "/brigades", nil)
+	routes := []struct {
+		method string
+		path   string
+	}{
+		{method: http.MethodPost, path: "/brigades"},
+		{method: http.MethodGet, path: "/brigades/1"},
+		{method: http.MethodPatch, path: "/brigades/1/archive"},
+		{method: http.MethodGet, path: "/brigades"},
+	}
 
-		builder.router.ServeHTTP(response, request)
+	for _, route := range routes {
+		t.Run(route.method+" "+route.path, func(t *testing.T) {
+			response := httptest.NewRecorder()
+			request := httptest.NewRequest(route.method, route.path, nil)
 
-		if response.Code != http.StatusUnauthorized {
-			t.Fatalf("status = %d, want %d", response.Code, http.StatusUnauthorized)
-		}
-	})
+			builder.router.ServeHTTP(response, request)
 
-	t.Run("get by id allows internal calls without authorization", func(t *testing.T) {
-		response := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, "/brigades/1", nil)
-
-		builder.router.ServeHTTP(response, request)
-
-		if response.Code == http.StatusUnauthorized {
-			t.Fatalf("status = %d, route must stay open for internal service calls", response.Code)
-		}
-	})
+			if response.Code == http.StatusUnauthorized {
+				t.Fatalf("status = %d, route must be open without authorization", response.Code)
+			}
+		})
+	}
 }
